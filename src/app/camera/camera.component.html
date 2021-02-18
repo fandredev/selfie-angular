@@ -1,0 +1,29 @@
+<!-- 
+  height - altura
+  width -largura
+  trigger - um observable que captura a imagem
+  imageCapture - um listener que ouve a trigger sempre que a imagem é capturada
+  showWebcam - se o usuario me deu acesso a camera dele
+  cameraSwitch - deviceId do dispositivo  
+  initError - Aplica um erro caso o usuário não me deu acesso a câmera
+-->
+<webcam
+  [height]="500"
+  [width]="500"
+  [trigger]="observableCamera"
+  (imageCapture)="handleImage($event)"
+  *ngIf="showWebcam"
+  [allowCameraSwitch]="allowCameraSwitch"
+  [switchCamera]="nextWebcamObservable"
+  [videoOptions]="videoOptions"
+  (cameraSwitched)="cameraHasSwitch($event)"
+  (initError)="handleInitError($event)"
+>
+</webcam>
+
+<button *ngIf="errors.length == 0" (click)="takeSnapshot()">Tirar foto</button>
+
+<h3 *ngIf="errors.length > 0">Errors</h3>
+<span *ngFor="let e of errors">
+  {{ e.message | json }}
+</span>
