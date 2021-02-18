@@ -7,22 +7,54 @@
   cameraSwitch - deviceId do dispositivo  
   initError - Aplica um erro caso o usuário não me deu acesso a câmera
 -->
-<webcam
-  [height]="500"
-  [width]="500"
-  [trigger]="observableCamera"
-  (imageCapture)="handleImage($event)"
-  *ngIf="showWebcam"
-  [allowCameraSwitch]="allowCameraSwitch"
-  [switchCamera]="nextWebcamObservable"
-  [videoOptions]="videoOptions"
-  (cameraSwitched)="cameraHasSwitch($event)"
-  (initError)="handleInitError($event)"
->
-</webcam>
+<section>
+  <webcam
+    [height]="500"
+    [width]="500"
+    [trigger]="observableCamera"
+    (imageCapture)="handleImage($event)"
+    *ngIf="showWebcam"
+    [allowCameraSwitch]="allowCameraSwitch"
+    [switchCamera]="nextWebcamObservable"
+    [videoOptions]="videoOptions"
+    (cameraSwitched)="cameraHasSwitch($event)"
+    (initError)="handleInitError($event)"
+  >
+  </webcam>
+</section>
 
-<button *ngIf="errors.length == 0" (click)="takeSnapshot()">Tirar foto</button>
+<!-- Id do dispositivo -->
+<h3 *ngIf="webcamImage && showWebcam">ID do dispositivo: {{ deviceId }}</h3>
 
+<section>
+  <!-- Tirar foto -->
+  <button
+    mat-raised-button
+    *ngIf="errors.length == 0 && showWebcam"
+    (click)="takeSnapshot()"
+    [color]="takeSnapshotButtonColor"
+  >
+    Take Snapshot
+  </button>
+
+  <!-- Mostrar ou desabilitar sua câmera-->
+  <button
+    mat-raised-button
+    (click)="toggleWebcam()"
+    [color]="noShowCamButtonColor"
+  >
+    <span *ngIf="showWebcam; else noShowWebcam">Hide camera</span>
+    <ng-template #noShowWebcam>Enable camera</ng-template>
+  </button>
+</section>
+
+<!-- Mostrar foto tirada -->
+<h1 *ngIf="webcamImage && showWebcam">Última foto retirada:</h1>
+<main *ngIf="webcamImage && showWebcam">
+  <img [src]="webcamImage.imageAsDataUrl" alt="Sua foto" />
+</main>
+
+<!-- Erros na câmera-->
 <h3 *ngIf="errors.length > 0">Errors</h3>
 <span *ngFor="let e of errors">
   {{ e.message | json }}

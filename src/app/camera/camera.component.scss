@@ -1,16 +1,21 @@
-.actionBtn {
-  font-size: 4em;
-  cursor: pointer;
-}
+section,
+main {
+  display: flex;
+  margin: 2rem auto;
+  align-items: center;
+  justify-content: center;
 
-.snapshot {
-  text-align: center;
-  img {
-    max-width: 800px;
-    max-height: 800px;
+  > img {
+    width: max-width;
+    height: max-height;
   }
 }
 
-ul.links {
-  padding-bottom: 20px;
+button {
+  margin: 2rem 1rem 2rem 0;
+}
+h1,
+h3 {
+  color: #fff;
+  text-align: center;
 }

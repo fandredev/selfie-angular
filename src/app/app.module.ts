@@ -7,12 +7,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { WebcamModule } from 'ngx-webcam';
 import { AppComponent } from './app.component';
 import { CameraComponent } from './camera/camera.component';
-
+import { HeaderComponent } from './header/header.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    CameraComponent
+    CameraComponent,
+    HeaderComponent,
   ],
   imports: [
     BrowserModule,
@@ -21,6 +22,7 @@ import { CameraComponent } from './camera/camera.component';
     MatToolbarModule,
     MatButtonModule,
     MatIconModule
+
   ],
   providers: [],
   bootstrap: [AppComponent]

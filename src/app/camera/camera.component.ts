@@ -1,6 +1,7 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit } from '@angular/core';
 import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
 import { Observable, Subject } from 'rxjs';
+import { Colors } from '../app.model';
 
 type Subjects = string | boolean
 
@@ -10,8 +11,11 @@ type Subjects = string | boolean
   styleUrls: ['./camera.component.scss']
 })
 export class CameraComponent implements OnInit {
-  @Output() // Usado para pegar um item dentro das props do pai
   pictureTaken = new EventEmitter<WebcamImage>();
+  webcamImage: WebcamImage = null
+
+  noShowCamButtonColor: Colors = 'primary'
+  takeSnapshotButtonColor: Colors = 'secondary'
 
   // Ligar e desligar
   showWebcam: boolean = true
@@ -45,7 +49,11 @@ export class CameraComponent implements OnInit {
     WebcamUtil.getAvailableVideoInputs().then((mediaDevices: MediaDeviceInfo[]) =>
       this.multipleWebcamsAvailable = mediaDevices && mediaDevices.length > 1
     )
+    console.log(this.webcamImage, 'Imagens vazias.')
+  }
 
+  ngDoCheck(): void {
+    console.log(this.webcamImage, 'Imagem preenchida')
   }
 
   // como o trigger é um subject, eu chamo o next para buscar os dados do observable
@@ -68,23 +76,14 @@ export class CameraComponent implements OnInit {
   showNextWebcam(dirOrDeviceId: Subjects): void {
     this.nextWebcam.next(dirOrDeviceId)
   }
-
-  /**
-   * Emite ao componente que chamar a função que eu recebi a imagem.
-   * ps: o emit func, provavelmente disparará a chamada e uma ação acontecerá no pai
-   * quando eu emite que recebi a imagem.
-   */
-  handleImage(webcamImage: WebcamImage): void {
-    console.info("recebi a imagem", webcamImage)
-    this.pictureTaken.emit(webcamImage)
-  }
-
   // Pega o id do dispositivo que está tirando a foto
   cameraHasSwitch(deviceId: string): void {
-    console.log('device ativo', deviceId)
     this.deviceId = deviceId
   }
 
+  handleImage(image: WebcamImage): void {
+    this.webcamImage = image
+  }
 
   get observableCamera(): Observable<void> {
     return this.trigger.asObservable()
