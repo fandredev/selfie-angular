@@ -1,10 +1,10 @@
-<!-- 
+<!--
   height - altura
   width -largura
   trigger - um observable que captura a imagem
   imageCapture - um listener que ouve a trigger sempre que a imagem é capturada
   showWebcam - se o usuario me deu acesso a camera dele
-  cameraSwitch - deviceId do dispositivo  
+  cameraSwitch - deviceId do dispositivo
   initError - Aplica um erro caso o usuário não me deu acesso a câmera
 -->
 <section>
@@ -24,13 +24,13 @@
 </section>
 
 <!-- Id do dispositivo -->
-<h3 *ngIf="webcamImage && showWebcam">ID do dispositivo: {{ deviceId }}</h3>
+<h3 *ngIf="webcamImage && showWebcam">Device ID: {{ deviceId }}</h3>
 
 <section>
   <!-- Tirar foto -->
   <button
     mat-raised-button
-    *ngIf="errors.length == 0 && showWebcam"
+    *ngIf="errors.length == 0 && showWebcam && nowAllowPermission === ''"
     (click)="takeSnapshot()"
     [color]="takeSnapshotButtonColor"
   >
@@ -42,6 +42,7 @@
     mat-raised-button
     (click)="toggleWebcam()"
     [color]="noShowCamButtonColor"
+    *ngIf="errors.length === 0 && nowAllowPermission === 'Permission Denied'"
   >
     <span *ngIf="showWebcam; else noShowWebcam">Hide camera</span>
     <ng-template #noShowWebcam>Enable camera</ng-template>
@@ -53,9 +54,3 @@
 <main *ngIf="webcamImage && showWebcam">
   <img [src]="webcamImage.imageAsDataUrl" alt="Sua foto" />
 </main>
-
-<!-- Erros na câmera-->
-<h3 *ngIf="errors.length > 0">Errors</h3>
-<span *ngFor="let e of errors">
-  {{ e.message | json }}
-</span>

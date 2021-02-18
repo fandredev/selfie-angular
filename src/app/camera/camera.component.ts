@@ -2,8 +2,13 @@ import { Component, EventEmitter, OnInit } from '@angular/core';
 import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
 import { Observable, Subject } from 'rxjs';
 import { Colors } from '../app.model';
+import { UtilsService } from '../utils.service';
 
 type Subjects = string | boolean
+
+enum Message {
+  success_photo = 'Foto retirada com sucesso'
+}
 
 @Component({
   selector: 'app-camera',
@@ -34,11 +39,16 @@ export class CameraComponent implements OnInit {
   // Errors
   errors: WebcamInitError[] = []
 
+  // Usuário não deu acesso a câmera
+  nowAllowPermission = ''
+
   // Atributo que ouvirá o evento (Tirar foto - Subject)
   trigger: Subject<void> = new Subject<void>();
 
   // Atributo que ouvirá o evento (Trocar de câmera (Caso haja multiplicas cans))
   private nextWebcam: Subject<Subjects> = new Subject<Subjects>()
+
+  constructor(private utils: UtilsService) { }
 
   /**
    * Quando o complemente for renderizado...
@@ -49,11 +59,11 @@ export class CameraComponent implements OnInit {
     WebcamUtil.getAvailableVideoInputs().then((mediaDevices: MediaDeviceInfo[]) =>
       this.multipleWebcamsAvailable = mediaDevices && mediaDevices.length > 1
     );
-    console.log(this.webcamImage, 'Imagens vazias.');
+    // console.log(this.webcamImage, 'Imagens vazias.');
   }
 
   ngDoCheck(): void {
-    console.log(this.webcamImage, 'Imagem preenchida');
+    // console.log(this.webcamImage, 'Imagem preenchida');
   }
 
   // como o trigger é um subject, eu chamo o next para buscar os dados do observable
@@ -68,8 +78,13 @@ export class CameraComponent implements OnInit {
 
   // Verifica se há alguma erro de permissão ou outro e joga isso no array de errors
   handleInitError(error: WebcamInitError): void {
-    this.errors.push(error);
-    console.log(this.errors, 'Ocorreu um erro ao iniciar sua câmera.');
+    const { mediaStreamError, message } = error;
+    const { name } = mediaStreamError;
+
+    if (mediaStreamError && name === 'NotAllowedError') {
+      this.nowAllowPermission = message;
+      this.utils.openSnackbar(`Erro: ${this.nowAllowPermission && 'Você não permitiu o acesso a câmera'}`, 'X');
+    }
   }
 
   // como o nextWebcam é um subject, eu chamo o next para buscar os dados do observable
@@ -82,6 +97,7 @@ export class CameraComponent implements OnInit {
   }
 
   handleImage(image: WebcamImage): void {
+    this.utils.openSnackbar(Message.success_photo, 'X');
     this.webcamImage = image;
   }
 
