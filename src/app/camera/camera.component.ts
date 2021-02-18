@@ -18,8 +18,8 @@ export class CameraComponent implements OnInit {
   takeSnapshotButtonColor: Colors = 'secondary'
 
   // Ligar e desligar
-  showWebcam: boolean = true
-  allowCameraSwitch: boolean = true
+  showWebcam = true
+  allowCameraSwitch = true
   multipleWebcamsAvailable = false
   deviceId: string
   videoOptions: MediaTrackConstraints = {
@@ -48,48 +48,48 @@ export class CameraComponent implements OnInit {
   ngOnInit(): void {
     WebcamUtil.getAvailableVideoInputs().then((mediaDevices: MediaDeviceInfo[]) =>
       this.multipleWebcamsAvailable = mediaDevices && mediaDevices.length > 1
-    )
-    console.log(this.webcamImage, 'Imagens vazias.')
+    );
+    console.log(this.webcamImage, 'Imagens vazias.');
   }
 
   ngDoCheck(): void {
-    console.log(this.webcamImage, 'Imagem preenchida')
+    console.log(this.webcamImage, 'Imagem preenchida');
   }
 
   // como o trigger é um subject, eu chamo o next para buscar os dados do observable
   takeSnapshot(): void {
-    this.trigger.next()
+    this.trigger.next();
   }
 
   // desabilita e habilita a câmera
   toggleWebcam(): void {
-    this.showWebcam = !this.showWebcam
+    this.showWebcam = !this.showWebcam;
   }
 
   // Verifica se há alguma erro de permissão ou outro e joga isso no array de errors
   handleInitError(error: WebcamInitError): void {
-    this.errors.push(error)
-    console.log(this.errors, 'Ocorreu um erro ao iniciar sua câmera.')
+    this.errors.push(error);
+    console.log(this.errors, 'Ocorreu um erro ao iniciar sua câmera.');
   }
 
   // como o nextWebcam é um subject, eu chamo o next para buscar os dados do observable
   showNextWebcam(dirOrDeviceId: Subjects): void {
-    this.nextWebcam.next(dirOrDeviceId)
+    this.nextWebcam.next(dirOrDeviceId);
   }
   // Pega o id do dispositivo que está tirando a foto
   cameraHasSwitch(deviceId: string): void {
-    this.deviceId = deviceId
+    this.deviceId = deviceId;
   }
 
   handleImage(image: WebcamImage): void {
-    this.webcamImage = image
+    this.webcamImage = image;
   }
 
   get observableCamera(): Observable<void> {
-    return this.trigger.asObservable()
+    return this.trigger.asObservable();
   }
 
   get nextWebcamObservable(): Observable<Subjects> {
-    return this.nextWebcam.asObservable()
+    return this.nextWebcam.asObservable();
   }
 }
