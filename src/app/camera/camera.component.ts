@@ -1,8 +1,9 @@
-import { Component, EventEmitter, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
 import { Observable, Subject } from 'rxjs';
 import { Colors } from '../app.model';
-import { UtilsService } from '../utils.service';
+import { DataService } from '../services/ia.service';
+import { UtilsService } from '../services/utils.service';
 
 type Subjects = string | boolean
 
@@ -16,9 +17,14 @@ enum Message {
   styleUrls: ['./camera.component.scss']
 })
 export class CameraComponent implements OnInit {
-  pictureTaken = new EventEmitter<WebcamImage>();
   webcamImage: WebcamImage = null
 
+  // Azure Atributes
+  imageUrl: string
+  personAge: string
+
+
+  // Cores
   noShowCamButtonColor: Colors = 'primary'
   takeSnapshotButtonColor: Colors = 'secondary'
 
@@ -48,7 +54,10 @@ export class CameraComponent implements OnInit {
   // Atributo que ouvirá o evento (Trocar de câmera (Caso haja multiplicas cans))
   private nextWebcam: Subject<Subjects> = new Subject<Subjects>()
 
-  constructor(private utils: UtilsService) { }
+  constructor(private utils: UtilsService, private data: DataService) {
+    this.imageUrl = '';
+
+  }
 
   /**
    * Quando o complemente for renderizado...
@@ -96,9 +105,19 @@ export class CameraComponent implements OnInit {
     this.deviceId = deviceId;
   }
 
+  /**
+   * Captura a imagem
+   */
   handleImage(image: WebcamImage): void {
     this.utils.openSnackbar(Message.success_photo, 'X');
     this.webcamImage = image;
+  }
+
+  /**
+   * Evento chamado quando eu clico na área da webcam
+   */
+  handleImageClick(): void {
+    console.log('cliquei');
   }
 
   get observableCamera(): Observable<void> {
@@ -107,5 +126,11 @@ export class CameraComponent implements OnInit {
 
   get nextWebcamObservable(): Observable<Subjects> {
     return this.nextWebcam.asObservable();
+  }
+
+  getPersonAge(imageUrl: string): void {
+    this.data.getPersonAge(imageUrl).subscribe(data => {
+      this.personAge = data;
+    });
   }
 }

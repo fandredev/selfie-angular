@@ -1,4 +1,6 @@
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -10,6 +12,7 @@ import { WebcamModule } from 'ngx-webcam';
 import { AppComponent } from './app.component';
 import { CameraComponent } from './camera/camera.component';
 import { HeaderComponent } from './header/header.component';
+import { DataService } from './services/ia.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -24,9 +27,11 @@ import { HeaderComponent } from './header/header.component';
     MatButtonModule,
     MatIconModule,
     MatDialogModule,
-    MatSnackBarModule
+    FormsModule,
+    MatSnackBarModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [DataService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

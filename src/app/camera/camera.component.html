@@ -19,9 +19,13 @@
     [videoOptions]="videoOptions"
     (cameraSwitched)="cameraHasSwitch($event)"
     (initError)="handleInitError($event)"
+    (imageClick)="handleImageClick()"
   >
-  </webcam>
+
+</webcam>
+<div class="ball"></div>
 </section>
+
 
 <!-- Id do dispositivo -->
 <h3 *ngIf="webcamImage && showWebcam">Device ID: {{ deviceId }}</h3>
@@ -54,3 +58,8 @@
 <main *ngIf="webcamImage && showWebcam">
   <img [src]="webcamImage.imageAsDataUrl" alt="Sua foto" />
 </main>
+
+<!-- <input type="text" [(ngModel)]="imageUrl" aria-label="Link" />
+<button (click)="getPersonAge(imageUrl)">Clicar</button>
+
+{{ personAge | json }} -->

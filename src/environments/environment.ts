@@ -1,9 +1,14 @@
+import { Env } from './environment.model';
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-export const environment = {
-  production: false
+
+
+export const environment: Env = {
+  production: false,
+  apiKey: '24d5ae2c52494725ae5961d26862e028',
+  azureUrl: 'https://brazilsouth.api.cognitive.microsoft.com/face/v1.0/detect?returnFaceId=true&returnFaceLandmarks=false&recognitionModel=recognition_03&returnRecognitionModel=false&detectionModel=detection_02&faceIdTimeToLive=86400'
 };
 
 /*
