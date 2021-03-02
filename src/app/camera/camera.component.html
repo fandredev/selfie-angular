@@ -21,14 +21,15 @@
     (initError)="handleInitError($event)"
     (imageClick)="handleImageClick()"
   >
-
-</webcam>
-<div class="ball"></div>
+  </webcam>
+  <div class="ball"></div>
 </section>
-
 
 <!-- Id do dispositivo -->
 <h3 *ngIf="webcamImage && showWebcam">Device ID: {{ deviceId }}</h3>
+<h3>
+  {{ isPhone }}
+</h3>
 
 <section>
   <!-- Tirar foto -->
