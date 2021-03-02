@@ -42,7 +42,6 @@ export class CameraComponent implements OnInit {
     }
   }
 
-  isPhone = false
   // Errors
   errors: WebcamInitError[] = []
 
@@ -59,14 +58,7 @@ export class CameraComponent implements OnInit {
     this.imageUrl = '';
 
   }
-  isMobile(): void {
-    try {
-      if (/Android|webOS|iPhone|iPad|iPod|pocket|psp|kindle|avantgo|blazer|midori|Tablet|Palm|maemo|plucker|phone|BlackBerry|symbian|IEMobile|mobile|ZuneWP7|Windows Phone|Opera Mini/i.test(navigator.userAgent)) {
-        this.isPhone = true;
-      }
-      this.isPhone = false;
-    } catch (e) { console.log('Error in isMobile'); this.isPhone = false; }
-  }
+
   /**
    * Quando o complemente for renderizado...
    *   - checa com uma promise, se o device do usuário tem mais de uma câmera.
@@ -76,7 +68,7 @@ export class CameraComponent implements OnInit {
     WebcamUtil.getAvailableVideoInputs().then((mediaDevices: MediaDeviceInfo[]) =>
       this.multipleWebcamsAvailable = mediaDevices && mediaDevices.length > 1
     );
-    this.isMobile();
+    // console.log(this.webcamImage, 'Imagens vazias.');
   }
 
   ngDoCheck(): void {
