@@ -81,6 +81,11 @@ export class CameraComponent implements OnInit {
       this.multipleWebcamsAvailable = mediaDevices && mediaDevices.length > 1
     );
     this.utils.userAgent();
+    this.store.select('webOrMobile').subscribe(v => {
+      this.userAgent.isMobile = v.isMobile;
+      this.userAgent.isTablet = v.isTablet;
+      this.userAgent.isWeb = v.isWeb;
+    });
   }
 
 
@@ -126,11 +131,7 @@ export class CameraComponent implements OnInit {
    * Evento chamado quando eu clico na área da webcam
    */
   handleImageClick(): void {
-    this.store.select('webOrMobile').subscribe(v => {
-      this.userAgent.isMobile = v.isMobile;
-      this.userAgent.isTablet = v.isTablet;
-      this.userAgent.isWeb = v.isWeb;
-    });
+
   }
 
   get observableCamera(): Observable<void> {
