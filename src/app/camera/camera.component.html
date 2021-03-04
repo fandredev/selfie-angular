@@ -21,12 +21,16 @@
     (initError)="handleInitError($event)"
     (imageClick)="handleImageClick()"
   >
-
-</webcam>
-<div class="ball"></div>
+  </webcam>
+  <div class="ball"></div>
 </section>
 
-
+<h3 *ngIf="userAgent.isMobile && userAgent.isTablet">
+  ESTA NO TABLET E NO CELULAR
+</h3>
+<h3 *ngIf="userAgent.isWeb">
+  ESTA NO PC
+</h3>
 <!-- Id do dispositivo -->
 <h3 *ngIf="webcamImage && showWebcam">Device ID: {{ deviceId }}</h3>
 

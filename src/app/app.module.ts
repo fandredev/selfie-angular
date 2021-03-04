@@ -8,11 +8,14 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { StoreModule } from '@ngrx/store';
 import { WebcamModule } from 'ngx-webcam';
 import { AppComponent } from './app.component';
 import { CameraComponent } from './camera/camera.component';
 import { HeaderComponent } from './header/header.component';
 import { DataService } from './services/ia.service';
+import { reducer } from './store/webormobile.reducer';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,7 +32,8 @@ import { DataService } from './services/ia.service';
     MatDialogModule,
     FormsModule,
     MatSnackBarModule,
-    HttpClientModule
+    StoreModule.forRoot({ webOrMobile: reducer }),
+    HttpClientModule,
   ],
   providers: [DataService],
   bootstrap: [AppComponent]

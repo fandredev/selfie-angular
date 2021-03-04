@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
 import { Observable, Subject } from 'rxjs';
 import { Colors } from '../app.model';
 import { DataService } from '../services/ia.service';
 import { UtilsService } from '../services/utils.service';
+import { AppState } from './../app.state';
 
 type Subjects = string | boolean
 
@@ -54,7 +56,17 @@ export class CameraComponent implements OnInit {
   // Atributo que ouvirá o evento (Trocar de câmera (Caso haja multiplicas cans))
   private nextWebcam: Subject<Subjects> = new Subject<Subjects>()
 
-  constructor(private utils: UtilsService, private data: DataService) {
+  userAgent = {
+    isMobile: false,
+    isTablet: false,
+    isWeb: false
+  }
+
+  constructor(
+    private utils: UtilsService,
+    private data: DataService,
+    public store: Store<AppState>,
+  ) {
     this.imageUrl = '';
 
   }
@@ -68,12 +80,9 @@ export class CameraComponent implements OnInit {
     WebcamUtil.getAvailableVideoInputs().then((mediaDevices: MediaDeviceInfo[]) =>
       this.multipleWebcamsAvailable = mediaDevices && mediaDevices.length > 1
     );
-    // console.log(this.webcamImage, 'Imagens vazias.');
+    this.utils.userAgent();
   }
 
-  ngDoCheck(): void {
-    // console.log(this.webcamImage, 'Imagem preenchida');
-  }
 
   // como o trigger é um subject, eu chamo o next para buscar os dados do observable
   takeSnapshot(): void {
@@ -117,7 +126,11 @@ export class CameraComponent implements OnInit {
    * Evento chamado quando eu clico na área da webcam
    */
   handleImageClick(): void {
-    console.log('cliquei');
+    this.store.select('webOrMobile').subscribe(v => {
+      this.userAgent.isMobile = v.isMobile;
+      this.userAgent.isTablet = v.isTablet;
+      this.userAgent.isWeb = v.isWeb;
+    });
   }
 
   get observableCamera(): Observable<void> {

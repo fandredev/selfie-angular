@@ -18,3 +18,9 @@ export interface DataLoad {
   faceId: string
   faceRectangule: FaceRect
 }
+
+export interface I_WebOrMobile<T = boolean> {
+  isMobile: T
+  isTablet: T
+  isWeb: T
+}
